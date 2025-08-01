@@ -36,7 +36,6 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
           TRUSTED_CONTRIBUTORS: ${{ secrets.TRUSTED_CONTRIBUTORS }}
