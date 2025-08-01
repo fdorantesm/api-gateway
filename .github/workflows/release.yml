@@ -37,7 +37,15 @@ jobs:
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
           TRUSTED_CONTRIBUTORS: ${{ secrets.TRUSTED_CONTRIBUTORS }}
         run: |
-          if [[ ! ",$TRUSTED_CONTRIBUTORS," == *",$PR_AUTHOR,"* ]]; then
+          IFS=',' read -r -a trusted_contributors_array <<< "$TRUSTED_CONTRIBUTORS"
+          is_trusted=false
+          for contributor in "${trusted_contributors_array[@]}"; do
+            if [[ "$contributor" == "$PR_AUTHOR" ]]; then
+              is_trusted=true
+              break
+            fi
+          done
+          if [[ "$is_trusted" == false ]]; then
             echo "User $PR_AUTHOR is not a trusted contributor. Skipping npm publish."
             exit 0
           fi
