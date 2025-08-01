@@ -1,10 +1,28 @@
 import express from 'express';
 import chalk from 'chalk';
-import { createProxyMiddleware } from 'http-proxy-middleware';
+import util from 'util';
 import { Config } from '../domain/config';
 import { logToFile } from '../domain/logs';
 
+function logger(context: string, message: string, color: (s: string) => string = chalk.white) {
+  const pid = process.pid;
+  const timestamp = new Date().toISOString();
+  const level = chalk.green('LOG');
+  const ctx = color(`[${context}]`);
+  console.log(`[Nest] ${pid}   - ${timestamp}   ${level} ${ctx} ${message}`);
+}
+
 export async function startServer(cfg: Config) {
+  // Avoid Node deprecation warning by replacing the deprecated util._extend
+  // used by the http-proxy dependency with Object.assign before requiring it.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if ((util as any)._extend) {
+    (util as any)._extend = Object.assign;
+  }
+
+  // Load http-proxy-middleware after patching util._extend.
+  const { createProxyMiddleware } = await import('http-proxy-middleware');
+
   const app = express();
   const colors = [chalk.cyan, chalk.magenta, chalk.yellow, chalk.green];
 
@@ -19,8 +37,29 @@ export async function startServer(cfg: Config) {
       pathRewrite: (p) => p.replace(new RegExp('^' + prefix), ''),
       onProxyReq: (_, req) => {
         const msg = `${req.method} ${req.originalUrl} -> ${dest}`;
-        if (cfg.log) console.log(color(msg));
+        if (cfg.log) logger('Request', msg, color);
         logToFile(node, `${new Date().toISOString()} ${msg}`);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (req as any)._startAt = Date.now();
+      },
+      onProxyRes: (proxyRes, req) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const start = (req as any)._startAt || Date.now();
+        const ms = Date.now() - start;
+        const msg = `${req.method} ${req.originalUrl} ${proxyRes.statusCode} +${ms}ms`;
+        if (cfg.log) logger('Response', msg, color);
+        logToFile(node, `${new Date().toISOString()} ${msg}`);
+      },
+      onError: (err, _req, res) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const start = (_req as any)._startAt || Date.now();
+        const ms = Date.now() - start;
+        const msg = `${_req.method} ${_req.originalUrl} 502 +${ms}ms`;
+        if (cfg.log) logger('Response', msg, color);
+        logToFile(node, `${new Date().toISOString()} ${msg}`);
+        console.error('Proxy error:', err.message);
+        res.writeHead(502, { 'Content-Type': 'text/plain' });
+        res.end('Bad gateway\n');
       }
     }));
   });
