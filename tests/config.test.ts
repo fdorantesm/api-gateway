@@ -10,6 +10,6 @@ describe('resolveConfigPath', () => {
 
   it('resolves names in home directory', () => {
     const result = resolveConfigPath('foo');
-    expect(result).toBe(path.join(os.homedir(), '.agw', 'foo.json'));
+    expect(result).toBe(path.join(os.homedir(), '.proxy', 'foo.json'));
   });
 });

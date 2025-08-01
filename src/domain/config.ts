@@ -11,7 +11,7 @@ export interface Config {
 
 export function resolveConfigPath(name: string): string {
   if (path.isAbsolute(name)) return name;
-  const base = path.join(os.homedir(), '.agw');
+  const base = path.join(os.homedir(), '.proxy');
   if (!name.endsWith('.json')) name += '.json';
   return path.join(base, name);
 }
@@ -33,7 +33,7 @@ export function saveConfig(name: string, cfg: Config) {
 }
 
 export function ensureLogsDir() {
-  const dir = path.join(os.homedir(), '.agw', 'logs');
+  const dir = path.join(os.homedir(), '.proxy', 'logs');
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
   return dir;
 }

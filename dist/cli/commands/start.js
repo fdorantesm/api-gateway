@@ -22,10 +22,10 @@ function makeStartCommand() {
         .option('--log', 'Enable request logging')
         .option('--daemon', 'Run in background')
         .addHelpText('after', `\nExamples:\n` +
-        `  $ npx agw start -p 8000 --node auth --destiny http://localhost:9000\n` +
-        `  $ npx agw start --save myconfig\n` +
-        `  $ npx agw start --config myconfig\n` +
-        `  $ npx agw start --daemon --config myconfig\n`);
+        `  $ npx proxy start -p 8000 --node auth --destiny http://localhost:9000\n` +
+        `  $ npx proxy start --save myconfig\n` +
+        `  $ npx proxy start --config myconfig\n` +
+        `  $ npx proxy start --daemon --config myconfig\n`);
     cmd.action(async (opts) => {
         if (opts.daemon) {
             const args = process.argv.slice(3).filter(a => a !== '--daemon');
