@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  # Required to create or update issues for tracking release progress or notifying developers.
   issues: write
 
 jobs:
