@@ -5,7 +5,7 @@
   "main": "dist/cli/index.js",
   "scripts": {
     "build": "tsc",
-    "test": "jest"
+    "test": "tsc -p tsconfig.test.json && node --test build/tests"
   },
   "keywords": [],
   "author": "",
@@ -25,12 +25,6 @@
     "inquirer": "^9.2.7"
   },
   "devDependencies": {
-    "typescript": "^5.4.5",
-    "ts-jest": "^29.1.1",
-    "jest": "^29.7.0",
-    "@types/jest": "^29.5.4",
-    "semantic-release": "^23.0.8",
-    "@semantic-release/git": "^10.0.1",
-    "@semantic-release/npm": "^10.0.1"
+    "typescript": "^5.4.5"
   }
 }

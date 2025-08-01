@@ -22,3 +22,5 @@ declare module 'child_process';
 declare var process: any;
 declare var __dirname: string;
 declare var Buffer: any;
+declare module 'node:test';
+declare module 'node:assert/strict';

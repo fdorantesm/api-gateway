@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
-import chalk from 'chalk';
 
 export interface Config {
   port: number;
@@ -29,7 +28,8 @@ export function saveConfig(name: string, cfg: Config) {
   const dir = path.dirname(file);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(file, JSON.stringify(cfg, null, 2));
-  console.log(chalk.green(`Configuration saved to ${file}`));
+  const green = (msg: string) => `\u001b[32m${msg}\u001b[0m`;
+  console.log(green(`Configuration saved to ${file}`));
 }
 
 export function ensureLogsDir() {
