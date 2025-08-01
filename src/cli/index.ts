@@ -5,7 +5,7 @@ import { makeLogsCommand } from './commands/logs';
 
 const program = new Command();
 program
-  .name('agw')
+  .name('proxy')
   .description('Local API Gateway proxy');
 
 program.addCommand(makeStartCommand());
