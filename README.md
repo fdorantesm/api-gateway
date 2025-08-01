@@ -1,4 +1,4 @@
-# api-gateway
+# proxy.sh
 
 Proxy server that emulates a simple AWS API Gateway locally. The published
 package already includes the compiled JavaScript so it can be executed directly
@@ -9,14 +9,14 @@ with **npx** or after installing globally.
 Use `npx` to run the latest released version without installing:
 
 ```bash
-npx api-gateway start --help
+npx proxy.sh start --help
 ```
 
-Or install globally and use the `agw` command:
+Or install globally and use the `proxy` command:
 
 ```bash
-npm install -g api-gateway
-agw start --help
+npm install -g proxy.sh
+proxy start --help
 ```
 
 ## Usage
@@ -24,7 +24,7 @@ agw start --help
 Run with inline configuration:
 
 ```bash
-npx api-gateway start -p 8000 \
+npx proxy.sh start -p 8000 \
   --node auth --destiny http://localhost:9000 \
   --node products --destiny http://localhost:9001
 ```
@@ -33,31 +33,31 @@ If you omit options the CLI will prompt for them using **inquirer**.
 
 ### Config files
 
-Save a configuration to `~/.agw/myconfig.json` using `--save`:
+Save a configuration to `~/.proxy/myconfig.json` using `--save`:
 
 ```bash
-npx api-gateway start --save myconfig
+npx proxy.sh start --save myconfig
 ```
 
 Run the gateway using that configuration:
 
 ```bash
-npx api-gateway start --config myconfig
+npx proxy.sh start --config myconfig
 ```
 
 ### Background mode
 
 Start the gateway in the background and log each service to
-`~/.agw/logs/[node].log`:
+`~/.proxy/logs/[node].log`:
 
 ```bash
-npx api-gateway start --config myconfig --daemon
+npx proxy.sh start --config myconfig --daemon
 ```
 
 View a service log:
 
 ```bash
-npx api-gateway logs auth
+npx proxy.sh logs auth
 ```
 
 ## Options (start command)
@@ -72,7 +72,7 @@ npx api-gateway logs auth
 For viewing logs use:
 
 ```bash
-npx api-gateway logs <node>
+npx proxy.sh logs <node>
 ```
 
 ## License

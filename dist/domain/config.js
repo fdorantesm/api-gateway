@@ -13,7 +13,7 @@ const os_1 = __importDefault(require("os"));
 function resolveConfigPath(name) {
     if (path_1.default.isAbsolute(name))
         return name;
-    const base = path_1.default.join(os_1.default.homedir(), '.agw');
+    const base = path_1.default.join(os_1.default.homedir(), '.proxy');
     if (!name.endsWith('.json'))
         name += '.json';
     return path_1.default.join(base, name);
@@ -35,7 +35,7 @@ function saveConfig(name, cfg) {
     console.log(green(`Configuration saved to ${file}`));
 }
 function ensureLogsDir() {
-    const dir = path_1.default.join(os_1.default.homedir(), '.agw', 'logs');
+    const dir = path_1.default.join(os_1.default.homedir(), '.proxy', 'logs');
     if (!fs_1.default.existsSync(dir))
         fs_1.default.mkdirSync(dir, { recursive: true });
     return dir;

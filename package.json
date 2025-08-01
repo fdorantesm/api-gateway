@@ -1,5 +1,5 @@
 {
-  "name": "api-gateway",
+  "name": "proxy.sh",
   "version": "1.0.0",
   "description": "Local API Gateway proxy",
   "main": "dist/cli/index.js",
@@ -12,7 +12,7 @@
   "license": "ISC",
   "type": "commonjs",
   "bin": {
-    "agw": "dist/cli/index.js"
+    "proxy": "dist/cli/index.js"
   },
   "files": [
     "dist"

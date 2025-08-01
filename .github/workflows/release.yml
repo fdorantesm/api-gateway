@@ -53,8 +53,8 @@ jobs:
             exit 0
           fi
           VERSION=$(node -p "require('./package.json').version")
-          npm version "$VERSION-dev.$PR_NUMBER.$GITHUB_RUN_NUMBER" --no-git-tag-version
-          npm publish --tag dev
+          npm version "$VERSION-pr.$PR_NUMBER.$GITHUB_RUN_NUMBER" --no-git-tag-version
+          npm publish --tag "pr-$PR_NUMBER"
       - name: Release
         if: github.event_name == 'push'
         uses: cycjimmy/semantic-release-action@v3
