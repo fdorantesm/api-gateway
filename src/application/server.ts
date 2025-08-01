@@ -38,20 +38,17 @@ export async function startServer(cfg: Config) {
         const msg = `${req.method} ${req.originalUrl} -> ${dest}`;
         if (cfg.log) logger('Request', msg, color);
         logToFile(node, `${new Date().toISOString()} ${msg}`);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (req as any)._startAt = Date.now();
+        requestTimings.set(req, Date.now()); // Store start time in WeakMap
       },
       onProxyRes: (proxyRes, req) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const start = (req as any)._startAt || Date.now();
+        const start = requestTimings.get(req) || Date.now(); // Retrieve start time
         const ms = Date.now() - start;
         const msg = `${req.method} ${req.originalUrl} ${proxyRes.statusCode} +${ms}ms`;
         if (cfg.log) logger('Response', msg, color);
         logToFile(node, `${new Date().toISOString()} ${msg}`);
       },
       onError: (err, _req, res) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const start = (_req as any)._startAt || Date.now();
+        const start = requestTimings.get(_req) || Date.now(); // Retrieve start time
         const ms = Date.now() - start;
         const msg = `${_req.method} ${_req.originalUrl} 502 +${ms}ms`;
         if (cfg.log) logger('Response', msg, color);
