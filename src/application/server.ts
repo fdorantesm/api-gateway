@@ -15,9 +15,8 @@ function logger(context: string, message: string, color: (s: string) => string =
 export async function startServer(cfg: Config) {
   // Avoid Node deprecation warning by replacing the deprecated util._extend
   // used by the http-proxy dependency with Object.assign before requiring it.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  if ((util as any)._extend) {
-    (util as any)._extend = Object.assign;
+  if ('_extend' in util) {
+    (util as typeof util & { _extend?: typeof Object.assign })._extend = Object.assign;
   }
 
   // Load http-proxy-middleware after patching util._extend.
