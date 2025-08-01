@@ -8,10 +8,15 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -60,8 +65,4 @@ jobs:
         uses: cycjimmy/semantic-release-action@v3
         with:
           branches: main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
