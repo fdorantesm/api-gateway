@@ -8,6 +8,10 @@ import { logToFile } from '../domain/logs';
 
 export async function startServer(cfg: Config): Promise<Server> {
   const app = express();
+
+  if (cfg.log) {
+    console.log(chalk.green(`Proxy configuration: ${JSON.stringify(cfg, null, 2)}`));
+  }
   if (cfg.cors) {
     const corsOptions: any = {};
     if (cfg.cors.origin) corsOptions.origin = cfg.cors.origin;
@@ -21,10 +25,23 @@ export async function startServer(cfg: Config): Promise<Server> {
     const color = colors[idx % colors.length];
     const prefix = node.startsWith('/') ? node : '/' + node;
 
-    app.use(prefix, createProxyMiddleware({
+    const options = {
       target: dest,
       changeOrigin: true,
-      pathRewrite: (p) => p.replace(new RegExp('^' + prefix), ''),
+      pathRewrite: (p: string) => p.replace(new RegExp('^' + prefix), ''),
+    };
+
+    if (cfg.log) {
+      const displayOptions = {
+        target: dest,
+        changeOrigin: true,
+        pathRewrite: `^${prefix} -> ''`
+      };
+      console.log(color(`Proxy config for ${prefix}: ${JSON.stringify(displayOptions, null, 2)}`));
+    }
+
+    app.use(prefix, createProxyMiddleware({
+      ...options,
       onProxyReq: (_, req) => {
         const msg = `${req.method} ${req.originalUrl} \u2192 ${dest}`;
         if (cfg.log) console.log(color(msg));
