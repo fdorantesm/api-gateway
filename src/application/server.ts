@@ -36,7 +36,7 @@ export async function startServer(cfg: Config): Promise<Server> {
     const options = {
       target: dest,
       changeOrigin: true,
-      pathRewrite: (p: string) => p.replace(new RegExp('^' + prefix), ''),
+      pathRewrite: { [`^${prefix}`]: '' },
     };
 
     if (cfg.log) {
@@ -48,7 +48,7 @@ export async function startServer(cfg: Config): Promise<Server> {
       console.log(color(`Proxy config for ${prefix}: ${JSON.stringify(displayOptions, null, 2)}`));
     }
 
-    app.use(createProxyMiddleware(prefix, {
+    app.use(prefix, createProxyMiddleware({
       ...options,
       onProxyReq: (_, req) => {
         const msg = `${req.method} ${req.originalUrl} \u2192 ${dest}`;
