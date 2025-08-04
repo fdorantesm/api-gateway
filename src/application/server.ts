@@ -38,8 +38,7 @@ export async function startServer(cfg: Config): Promise<Server> {
       changeOrigin: true,
       pathRewrite: { [`^${prefix}`]: '' },
       onProxyReq: (_: any, req: any) => {
-        const rewritten = req.originalUrl.replace(new RegExp(`^${prefix}`), '');
-        const url = new URL(rewritten, dest);
+        const url = new URL(req.url, dest);
         const msg = `${req.method} ${req.originalUrl} \u2192 ${url.href}`;
         if (cfg.log) console.log(color(msg));
         logToFile(node, `${new Date().toISOString()} ${msg}`);
