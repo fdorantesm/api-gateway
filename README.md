@@ -91,7 +91,7 @@ npx proxy.sh logs <node>
 
 ## License
 
-ISC
+MIT
 
 ## Development
 
