@@ -48,7 +48,7 @@ export async function startServer(cfg: Config): Promise<Server> {
       console.log(color(`Proxy config for ${prefix}: ${JSON.stringify(displayOptions, null, 2)}`));
     }
 
-    app.use(prefix, createProxyMiddleware({
+    app.use(createProxyMiddleware(prefix, {
       ...options,
       onProxyReq: (_, req) => {
         const msg = `${req.method} ${req.originalUrl} \u2192 ${dest}`;

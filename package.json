@@ -5,7 +5,8 @@
   "main": "dist/cli/index.js",
   "scripts": {
     "build": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "version": "node -p \"require('./package.json').version\""
   },
   "keywords": [],
   "author": "",
