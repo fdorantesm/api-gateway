@@ -21,7 +21,7 @@ describe('startServer', () => {
 
   beforeAll(async () => {
     const authApp = express();
-    authApp.get('*', (_, res) => res.send('auth'));    
+    authApp.get('*', (_, res) => res.send('auth'));
     auth = authApp.listen(9001);
 
     const invoicesApp = express();
