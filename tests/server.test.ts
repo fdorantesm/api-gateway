@@ -35,6 +35,7 @@ describe('startServer', () => {
         invoices: 'http://localhost:9002/invoices',
       },
       log: false,
+      cors: { origin: ['http://example.com'], methods: ['GET'] },
     });
   });
 
@@ -50,5 +51,12 @@ describe('startServer', () => {
 
     const r2 = await fetch('http://localhost:3100/invoices/test');
     expect(await r2.text()).toBe('invoices');
+  });
+
+  it('applies CORS headers when enabled', async () => {
+    const res = await fetch('http://localhost:3100/auth/test', {
+      headers: { Origin: 'http://example.com' }
+    });
+    expect(res.headers.get('access-control-allow-origin')).toBe('http://example.com');
   });
 });

@@ -16,6 +16,10 @@ export function makeStartCommand(): Command {
     .option('-s, --save <file>', 'Save config under given name')
     .option('--log', 'Enable request logging')
     .option('--daemon', 'Run in background')
+    .option('--cors', 'Enable CORS')
+    .option('--cors-origin <origin>', 'Allowed CORS origin', collect, [])
+    .option('--cors-method <method>', 'Allowed CORS method', collect, [])
+    .option('--cors-header <header>', 'Allowed CORS header', collect, [])
     .addHelpText('after', `\nExamples:\n` +
       `  $ npx proxy start -p 8000 --node auth:http://localhost:9000 --node products:http://localhost:9001\n` +
       `  $ npx proxy start --save myconfig\n` +
@@ -69,6 +73,12 @@ export function makeStartCommand(): Command {
       cfg.log = opts.log ?? cfg.log;
       if (Object.keys(argRoutes).length) cfg.nodes = argRoutes;
     }
+
+    const cors: any = {};
+    if (opts.corsOrigin && opts.corsOrigin.length) cors.origin = opts.corsOrigin;
+    if (opts.corsMethod && opts.corsMethod.length) cors.methods = opts.corsMethod;
+    if (opts.corsHeader && opts.corsHeader.length) cors.allowedHeaders = opts.corsHeader;
+    if (opts.cors || Object.keys(cors).length) cfg.cors = cors;
 
     if (Object.keys(cfg.nodes).length === 0) {
       console.error('At least one node mapping must be provided');
