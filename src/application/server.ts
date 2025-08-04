@@ -37,6 +37,13 @@ export async function startServer(cfg: Config): Promise<Server> {
       target: dest,
       changeOrigin: true,
       pathRewrite: { [`^${prefix}`]: '' },
+      onProxyReq: (_: any, req: any) => {
+        const rewritten = req.originalUrl.replace(new RegExp(`^${prefix}`), '');
+        const url = new URL(rewritten, dest);
+        const msg = `${req.method} ${req.originalUrl} \u2192 ${url.href}`;
+        if (cfg.log) console.log(color(msg));
+        logToFile(node, `${new Date().toISOString()} ${msg}`);
+      }
     };
 
     if (cfg.log) {
@@ -48,14 +55,7 @@ export async function startServer(cfg: Config): Promise<Server> {
       console.log(color(`Proxy config for ${prefix}: ${JSON.stringify(displayOptions, null, 2)}`));
     }
 
-    app.use(prefix, createProxyMiddleware({
-      ...options,
-      onProxyReq: (_, req) => {
-        const msg = `${req.method} ${req.originalUrl} \u2192 ${dest}`;
-        if (cfg.log) console.log(color(msg));
-        logToFile(node, `${new Date().toISOString()} ${msg}`);
-      }
-    }));
+    app.use(prefix, createProxyMiddleware(options));
   });
 
   return await new Promise<Server>((resolve) => {
