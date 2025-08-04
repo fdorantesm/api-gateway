@@ -14,9 +14,12 @@ export function tailLog(node: string) {
     console.error('Log file not found for', node);
     process.exit(1);
   }
+
   let size = fs.statSync(file).size;
   const stream = fs.createReadStream(file, { encoding: 'utf-8', start: 0 });
+
   stream.on('data', chunk => process.stdout.write(chunk));
+
   fs.watchFile(file, { interval: 1000 }, () => {
     const newSize = fs.statSync(file).size;
     if (newSize > size) {
