@@ -1,6 +1,6 @@
 {
   "name": "proxy.sh",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Local API Gateway proxy",
   "main": "dist/cli/index.js",
   "scripts": {
