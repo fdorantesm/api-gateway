@@ -52,7 +52,7 @@ its destination:
 ```json
 {
   "port": 8000,
-  "nodes": {
+"nodes": {
     "auth": "http://localhost:9001/auth",
     "invoices": "http://localhost:9002/invoices"
   },
