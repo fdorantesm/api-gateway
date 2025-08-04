@@ -2,10 +2,17 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 
+export interface CorsConfig {
+  origin?: string[];
+  methods?: string[];
+  allowedHeaders?: string[];
+}
+
 export interface Config {
   port: number;
   nodes: Record<string, string>;
   log?: boolean;
+  cors?: CorsConfig;
 }
 
 export function resolveConfigPath(name: string): string {

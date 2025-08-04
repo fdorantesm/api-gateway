@@ -1,5 +1,6 @@
 import express from 'express';
 import chalk from 'chalk';
+import cors from 'cors';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import type { Server } from 'http';
 import { Config } from '../domain/config';
@@ -7,6 +8,13 @@ import { logToFile } from '../domain/logs';
 
 export async function startServer(cfg: Config): Promise<Server> {
   const app = express();
+  if (cfg.cors) {
+    const corsOptions: any = {};
+    if (cfg.cors.origin) corsOptions.origin = cfg.cors.origin;
+    if (cfg.cors.methods) corsOptions.methods = cfg.cors.methods;
+    if (cfg.cors.allowedHeaders) corsOptions.allowedHeaders = cfg.cors.allowedHeaders;
+    app.use(cors(corsOptions));
+  }
   const colors = [chalk.cyan, chalk.magenta, chalk.yellow, chalk.green];
 
   Object.entries(cfg.nodes).forEach(([node, dest], idx) => {

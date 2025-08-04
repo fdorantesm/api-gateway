@@ -56,7 +56,12 @@ its destination:
     "auth": "http://localhost:9001/auth",
     "invoices": "http://localhost:9002/invoices"
   },
-  "log": true
+  "log": true,
+  "cors": {
+    "origin": ["http://example.com"],
+    "methods": ["GET"],
+    "allowedHeaders": ["Content-Type"]
+  }
 }
 ```
 
@@ -83,6 +88,10 @@ npx proxy.sh logs auth
 - `-s, --save`      Save provided/interactive options as configuration.
 - `--log`           Enable console request logging.
 - `--daemon`        Run in background.
+- `--cors`          Enable CORS.
+- `--cors-origin`   Allowed CORS origin (repeatable).
+- `--cors-method`   Allowed CORS method (repeatable).
+- `--cors-header`   Allowed CORS header (repeatable).
 For viewing logs use:
 
 ```bash
