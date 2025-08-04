@@ -47,7 +47,7 @@ async function startServer(cfg) {
             };
             console.log(color(`Proxy config for ${prefix}: ${JSON.stringify(displayOptions, null, 2)}`));
         }
-        app.use(prefix, (0, http_proxy_middleware_1.createProxyMiddleware)({
+        app.use((0, http_proxy_middleware_1.createProxyMiddleware)(prefix, {
             ...options,
             onProxyReq: (_, req) => {
                 const msg = `${req.method} ${req.originalUrl} \u2192 ${dest}`;
