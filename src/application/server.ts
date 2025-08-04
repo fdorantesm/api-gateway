@@ -37,7 +37,7 @@ export async function startServer(cfg: Config): Promise<Server> {
       target: dest,
       changeOrigin: true,
       pathRewrite: { [`^${prefix}`]: '' },
-      onProxyReq: (_: any, req: any) => {
+      onProxyReq: (_: ClientRequest, req: IncomingMessage & { originalUrl: string; method: string }) => {
         const url = new URL(req.url, dest);
         const msg = `${req.method} ${req.originalUrl} \u2192 ${url.href}`;
         if (cfg.log) console.log(color(msg));
