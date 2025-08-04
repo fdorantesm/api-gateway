@@ -37,7 +37,7 @@ async function startServer(cfg) {
         const options = {
             target: dest,
             changeOrigin: true,
-            pathRewrite: (p) => p.replace(new RegExp('^' + prefix), ''),
+            pathRewrite: { [`^${prefix}`]: '' },
         };
         if (cfg.log) {
             const displayOptions = {
@@ -47,7 +47,7 @@ async function startServer(cfg) {
             };
             console.log(color(`Proxy config for ${prefix}: ${JSON.stringify(displayOptions, null, 2)}`));
         }
-        app.use((0, http_proxy_middleware_1.createProxyMiddleware)(prefix, {
+        app.use(prefix, (0, http_proxy_middleware_1.createProxyMiddleware)({
             ...options,
             onProxyReq: (_, req) => {
                 const msg = `${req.method} ${req.originalUrl} \u2192 ${dest}`;
