@@ -25,11 +25,12 @@ Run with inline configuration:
 
 ```bash
 npx proxy.sh start -p 8000 \
-  --node auth --destiny http://localhost:9000 \
-  --node products --destiny http://localhost:9001
+  --node auth:http://localhost:9000 \
+  --node products:http://localhost:9001
 ```
 
-If you omit options the CLI will prompt for them using **inquirer**.
+If you omit options the CLI will prompt for them using **inquirer**. When
+stored configurations exist, the CLI also lets you select one to use.
 
 ### Config files
 
@@ -43,6 +44,20 @@ Run the gateway using that configuration:
 
 ```bash
 npx proxy.sh start --config myconfig
+```
+
+Configurations are stored as JSON objects where each property maps a node to
+its destination:
+
+```json
+{
+  "port": 8000,
+  "nodes": {
+    "auth": "http://localhost:9001/auth",
+    "invoices": "http://localhost:9002/invoices"
+  },
+  "log": true
+}
 ```
 
 ### Background mode
@@ -63,8 +78,7 @@ npx proxy.sh logs auth
 ## Options (start command)
 
 - `-p, --port`      Port to listen on.
-- `-n, --node`      Path prefix to route (repeatable).
-- `-d, --destiny`   Destination URL (repeatable to match nodes).
+- `-n, --node`      Node mapping in `node:destiny` form (repeatable).
 - `-c, --config`    Configuration name or path.
 - `-s, --save`      Save provided/interactive options as configuration.
 - `--log`           Enable console request logging.

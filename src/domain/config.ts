@@ -4,8 +4,7 @@ import os from 'os';
 
 export interface Config {
   port: number;
-  nodes: string[];
-  destinies: string[];
+  nodes: Record<string, string>;
   log?: boolean;
 }
 
@@ -30,6 +29,15 @@ export function saveConfig(name: string, cfg: Config) {
   fs.writeFileSync(file, JSON.stringify(cfg, null, 2));
   const green = (msg: string) => `\u001b[32m${msg}\u001b[0m`;
   console.log(green(`Configuration saved to ${file}`));
+}
+
+export function listConfigs(): string[] {
+  const dir = path.join(os.homedir(), '.proxy');
+  if (!fs.existsSync(dir)) return [];
+  return fs
+    .readdirSync(dir)
+    .filter((f) => f.endsWith('.json'))
+    .map((f) => f.replace(/\.json$/, ''));
 }
 
 export function ensureLogsDir() {
